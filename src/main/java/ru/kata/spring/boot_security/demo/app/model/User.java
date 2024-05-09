@@ -23,6 +23,23 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "password")
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
+    private Set<Role> roles;
+
+    public User() {
+    }
+
+    public User(String userName, String email) {
+        this.userName = userName;
+        this.email = email;
+    }
+
     public Long getId() {
         return id;
     }
@@ -62,21 +79,6 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
-    @Column(name = "password")
-    private String password;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Role> roles;
-
-    public User() {
-    }
-
-    public User(String userName, String email) {
-        this.userName = userName;
-        this.email = email;
-    }
-
 
     @Override
     public boolean equals(Object o) {
